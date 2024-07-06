@@ -1,4 +1,4 @@
-﻿namespace silverhorse.Dtos
+﻿    namespace silverhorse.Dtos
 {
     public class ListResponseDto<T>
     {

@@ -1,7 +1,7 @@
 ﻿
-namespace MicroserviceBackendCRM.Dtos
+namespace silverhorse.Dtos
 {
-    public class AlbumPostDto 
+    public class BaseAlbumDto 
     {
         public int UserId { get; set; }
         public int Id { get; set; }

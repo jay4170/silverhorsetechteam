@@ -12,7 +12,7 @@ namespace silverhorse.Controllers
         private readonly Posts _postFactory;
 
         public PostsController(Posts postFactory)
-        {
+        {   
             _postFactory = postFactory;
         }
 
