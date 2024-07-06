@@ -40,7 +40,7 @@ The Silverhorse API is a .NET API designed to retrieve posts, albums, users, and
 
 4. **Set the Startup Project:**
 
-    - Right-click on the API project (typically named `silverhorse` or similar) in Solution Explorer.
+    - Right-click on the API project in Solution Explorer.
     - Select `Set as Startup Project`.
 
 5. **Build and Run the Project:**
