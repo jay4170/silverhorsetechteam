@@ -8,7 +8,7 @@ namespace silverhorse.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly Users _userFactory;

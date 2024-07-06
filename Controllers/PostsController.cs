@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using silverhorse.Business_Logic;
 using silverhorse.Dtos;
 using System.Threading.Tasks;
@@ -7,6 +8,9 @@ namespace silverhorse.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
+    [Authorize]
+
     public class PostsController : ControllerBase
     {
         private readonly Posts _postFactory;

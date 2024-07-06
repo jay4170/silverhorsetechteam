@@ -4,41 +4,67 @@ using Microsoft.Identity.Web;
 using silverhorse.Business_Logic;
 using System.Net.Http.Headers;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using silverhorse.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddAuthentication(options =>
+var authenticationBuilder = builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
+});
+
+authenticationBuilder.AddJwtBearer(options =>
 {
+    // Set up the token validation parameters
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = false,
         ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = false,
-        // Custom validation of the token
         SignatureValidator = (token, parameters) =>
         {
-            // Remove "Bearer " prefix if present
-            if (token.StartsWith("Bearer "))
-            {
-                token = token.Substring("Bearer ".Length);
-            }
-
             if (token == "af24353tdsfw")
             {
-                var jwt = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(token);
-                return jwt;
+                var claims = new[] { new Claim(ClaimTypes.Name, "TestUser") };
+                var identity = new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+                return new CustomSecurityToken(principal);
             }
-
-            throw new SecurityTokenInvalidSignatureException("Invalid token signature.");
+            throw new SecurityTokenException("Invalid token");
         }
     };
+
+    // Configure additional events if needed for further debugging
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+            if (authHeader?.StartsWith("Bearer ") == true)
+            {
+                var token = authHeader.Substring("Bearer ".Length).Trim();
+                if (token == "af24353tdsfw")
+                {
+                    var claims = new[] { new Claim(ClaimTypes.Name, "TestUser") };
+                    var identity = new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
+
+                    context.Principal = principal;
+                    context.Success(); // Signal successful authentication
+                    return Task.CompletedTask;
+                }
+                            throw new NotImplementedException(); // Throw NotImplementedException instead of SecurityTokenException
+
+            }
+            return Task.CompletedTask;
+        },
+      
+    };
+
 });
 
 builder.Services.AddControllers();

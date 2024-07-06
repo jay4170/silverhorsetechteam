@@ -30,15 +30,16 @@ public class CollectionService
 
         for (int i = 0; i < 30; i++)
         {
-            var post = new List<BasePostDto> { posts[random.Next(posts.Count)] };
-            var album = new List<BaseAlbumDto> { albums[random.Next(albums.Count)] };
-            var user = new List<UserDto> { users[random.Next(users.Count)] };
+            // Randomly select one post, one album, and one user
+            var post = posts[random.Next(posts.Count)];
+            var album = albums[random.Next(albums.Count)];
+            var user = users[random.Next(users.Count)];
 
             collection.Add(new BaseCollectionItem
             {
-                Post = post,
-                Album = album,
-                User = user
+                Post = new List<BasePostDto> { post },
+                Album = new List<BaseAlbumDto> { album },
+                User = new List<UserDto> { user }
             });
         }
 
